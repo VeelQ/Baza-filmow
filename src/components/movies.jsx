@@ -3,6 +3,7 @@ import MoviesAlbum from "./moviesAlbum";
 import Pagination from "./common/pagination";
 import {paginate} from "../utils/paginate";
 import _ from 'lodash';
+const axios = require('axios');
 
 
 class Movies extends Component {
@@ -13,64 +14,39 @@ class Movies extends Component {
            error: null,
            isLoaded: false,
            items: [],
-           pageSize: 18,
+           pageSize: 12,
            currentPage: 1,
            sortColumn: {path: 'title', order: 'asc'}
        };
     }
 
     componentDidMount() {
-        let result = []
-        for(let i = 0; i < 40; i++){
-                result.push({"id":i, "text": "Alien", "image":"process.env.PUBLIC_URL + '/logo.png'"});
-        }
-        
-
-        this.setState({
-            isLoaded: true,
-            items: result
+        axios({method:'get',url:'https://at.usermd.net/api/movies'})
+        .then((result) => {
+            this.setState({
+                isLoaded: true,
+                items: result.data
+            });
+            
+        },
+        (error) => {
+            this.setState({
+                isLoaded: true,
+                error
+            })
+            console.error('Something went wrong during fetching movies')
         })
     }
-
-    handleDelete = (post) => {
-        const movies = this.state.items.filter(p => p.id !== post.id);
-        this.setState({items: movies});
-     };
 
     handlePageChange = (page) => {
         this.setState({currentPage: page});
     };
 
-    handleSort = (path) => {
-        const sortColumn = {...this.state.sortColumn};
-        if (sortColumn.path === path) {
-            sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
-        } else {
-            sortColumn.path = path;
-            sortColumn.order = 'asc';
-        }
-        this.setState({sortColumn});
-     };
-
-     renderSortIcon = (column) => {
-   
-        if (column !== this.state.sortColumn.path) {
-            return null;
-        }
-        if (this.state.sortColumn.order === 'asc') {
-            return <i className="fa fa-sort-asc"></i>
-        }
-     
-        if (this.state.sortColumn.order === 'desc') {
-            return <i className="fa fa-sort-desc"></i>
-        }
-     };
- 
     render() {
         const { items, pageSize, currentPage, sortColumn } = this.state;
         
         if (!items.length) {
-            return <p>Brak wpisów</p>
+            return <p>No movies</p>
         }
         
         const sorted = _.orderBy(items, [sortColumn.path], [sortColumn.order]);

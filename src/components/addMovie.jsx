@@ -1,70 +1,100 @@
 import React, { useState } from "react";
-//import { Link } from "react-router-dom";
-
-
+//import Navbar from "./Navbar";
+import axios from 'axios';
 
 const AddMovie = () => {
-    const [selected, setSelected] = useState(process.env.PUBLIC_URL + '/alien.jpg')
-    const [className, setClassName] = useState("card-img-top imgt")
+  const [movieData, setMovieData] = useState({
+    id: "",
+    title: "",
+    image: "",
+    content: ""
+  });
 
-    const handleChange = (event) => {
-        setSelected( URL.createObjectURL(event.target.files[0]));
-        setClassName("card-img-top")
-      };
+  //const [className, setClassName] = useState("card-img-top imgt")
 
-   return <div className="flexCenter">
-    <div className="album py-5 bg-dark mb-5">
-        <div className="row justify-content-center">
-            <div className="col-md-2">
-                <div className="card mb-4 box-shadow bg-dark text-white">
-                    <img id='frame' className={className} src={selected} alt="Movie"></img>
-                    <div className="d-grid gap-2">
-                        <label className="btn btn-primary" >
-                            Upload Image<input type="file" id="upload" onChange={handleChange} hidden/>
-                        </label>
-                    </div>
-                    <div className="card-body">
-                        <div className="col mb-2">
-                            <input type="text" className="form-control-sm bg-dark text-light w-100" placeholder="Title"/>
-                        </div>
-                        <div className="col">
-                            <input type="number" className="form-control-sm bg-dark text-light w-100" placeholder="Duration (min.)"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="col-md-8 text-white p-4 p-lg-0">
-                <div className="form-floating mb-3">
-                    <textarea className="form-control bg-dark" id="description" rows="3" placeholder="Description"></textarea>
-                    <label htmlFor="description" className="form-label">Movie description</label>
-                </div>
+  const[successMessage, setSuccessMessage] = useState('');
+  const[errorMessage, setErrorMessage] = useState('');
 
-                <div className='row'>
-                    <p className="col-sm-2">Genere:</p>
-                    <div className="col-md-5">
-                        <input type="text" className="form-control bg-dark text-light" placeholder="Genre"/>
-                    </div>
-                </div>
-                <div className='row'>
-                    <p className="col-sm-2">Release date:</p>
-                    <div className="col-md-5">
-                        <input type="date" className="form-control bg-dark text-light" placeholder="Premiere"/>
-                    </div>
-                </div>
-                <div className='row mb-2'>
-                    <p className="col-sm-2">Trailer Link:</p>
-                    <div className="col-md-5">
-                        <input type="url" className="form-control bg-dark text-light" placeholder="Trailer url"/>
-                    </div>
-                </div>
-                <div className="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary mb-3">Add</button>
-                </div>
-            </div>
+
+  const handleChange = e => {
+    setMovieData({...movieData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    axios.post('https://at.usermd.net/api/movies', movieData)
+      .then(res => {
+        setSuccessMessage("Movie succesfully added")
+      })
+      .catch(err => {
+        setErrorMessage("An error has occured, please try again");
+      });
+    };
+
+
+        return(
+        //<>
             
-        </div>
-    </div>
-   </div>;
-};
+    //         <section className="vh-100 bg-image" id= "backgroundView" >
+
+    //   <div className="row d-flex justify-content-center align-items-center h-20" >
+    //     <div className="col-12 col-md-9 col-lg-7 col-xl-6" >
+    //     <div className="card mb-4 box-shadow bg-dark text-white" >
+    //         <div className="card-body p-5" >
+    //           <h2 className="text-uppercase text-center mb-5">Add movie</h2>
+
+    <div className="containter d-flex justify-content-center">
+        <div className="col-md-5 px-3 px-lg-5 py-5 bg-dark mb-5">
+
+              <form onSubmit={handleSubmit}>
+                <div className="text-center text-white">
+                    <p>Add movie</p>
+                  
+                </div>
+
+              <div className="form-outline mb-4">
+                  <input type="text" id="form3Example1cg" className="form-control form-control-lg bg-dark text-light" name="title" value={movieData.title} onChange={handleChange} placeholder="Title" required/>
+                </div>
+
+                <div className="form-outline mb-4">
+                    <textarea className="form-control form-control-lg bg-dark text-light" id="textAreaExample" rows="4" name="content" value={movieData.content} onChange={handleChange} placeholder="Description" required/>
+                </div>
+
+                <div className="form-outline mb-4">
+                  <input type="text" id="form3Example4cdg" className="form-control form-control-lg bg-dark text-light" name="image" value={movieData.image} onChange={handleChange} placeholder="Image link" required/>
+                </div>
+                {/* https://cdn.gracza.pl/galeria/mdb/f/85_en.jpg */}
+
+                <div className="d-flex justify-content-center">
+                  <button type="submit"
+                    className="btn btn-outline-primary me-2">Add movie</button>
+                </div>
+
+                {/* <br/> */}
+                <div>
+                        {successMessage && (
+                          <div className="alert alert-success" role="alert">
+                           {successMessage}
+
+                          </div>
+                        )}
+                        {errorMessage && (
+                          <div className="alert alert-danger" role="alert">
+                            {errorMessage}
+                          </div>
+          )}
+          </div>
+
+              </form>
+
+            </div>
+          </div>
+//         </div>
+//       </div>
+// </section>
+
+        //</>
+    );
+}
 
 export default AddMovie;

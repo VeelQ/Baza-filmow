@@ -46,10 +46,10 @@ body{
   margin-left: 0;
   margin-right: 0;
 }
-.card:hover{
+.card-hoop:hover{
   transform: scale(1.08); 
 }
-.card-img-top:hover{
+.card-img-top-brightness:hover{
   filter: brightness(150%);
 }
 

@@ -1,58 +1,90 @@
 import React from "react";
-//import { Link } from "react-router-dom";
+const axios = require('axios');
 
 const SignupForm = () => {
 
+
+    let name = ""
+    const nameInput = (e) => {
+        name = e.target.value
+    }
+
+    let password = ""
+    const passInput = (e) => {
+        password = e.target.value
+    }
+
+    let email = ""
+    const emailInput = (e) => {
+        email = e.target.value
+    }
+
+    const validatePass = (e) => {
+        e.target.setCustomValidity(e.target.value!== password? "Passwords not the same": "")
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        axios({
+            method: 'post',
+            url: 'https://at.usermd.net/api/user/create',
+            data: {
+                name: name,
+                email: email,
+                password: password
+            }
+        }).then((response) => {
+            console.log(response)
+        }).catch((error) => {
+            console.log(error);
+        });
+
+
+   };
+
+
+
     return (
+        
         <div className="containter d-flex justify-content-center">
         <div className="col-md-5 px-3 px-lg-5 py-5 bg-dark mb-5">
                     
-        <form>
+        <form onSubmit={handleSubmit}>
                 <div className="text-center text-white">
                     <p>Sign up with:</p>
-                    <button type="button" className="btn btn-link btn-floating mx-1">
-                    <i className="fa fa-facebook-f"></i>
-                    </button>
-
-                    <button type="button" className="btn btn-link btn-floating mx-1">
-                    <i className="fa fa-google"></i>
-                    </button>
-
-                    <button type="button" className="btn btn-link btn-floating mx-1">
-                    <i className="fa fa-twitter"></i>
-                    </button>
-
-                    <button type="button" className="btn btn-link btn-floating mx-1">
-                    <i className="fa fa-github"></i>
-                    </button>
-                </div>
-
-                <p className="text-center">or:</p>
-
-                
-                <div className="form-floating text-dark mb-3">
-                    <input type="text" id="registerUsername" className="form-control" placeholder="Username" />
-                    <label className="form-label" htmlFor="registerUsername">Username</label>
+                  
                 </div>
 
                 
-                <div className="form-floating text-dark mb-3">
-                    <input type="email" id="registerEmail" className="form-control" placeholder="Email"/>
-                    <label className="form-label" htmlFor="registerEmail">Email</label>
+
+                
+                <div className="form-outline mb-3">
+                    <input type="text" id="registerUsername" className="form-control form-control-lg bg-dark text-light"
+                    placeholder="Username" onChange={nameInput} required/>
+                    {/* <label className="form-label" htmlFor="registerUsername">Username</label> */}
                 </div>
 
                 
-                <div className="form-floating text-dark mb-3">
-                    <input type="password" id="registerPassword" className="form-control" placeholder="Password"/>
-                    <label className="form-label" htmlFor="registerPassword">Password</label>
+                <div className="form-outline mb-3">
+                    <input type="email" id="registerEmail" className="form-control form-control-lg bg-dark text-light"
+                     placeholder="Email" onChange={emailInput} required/>
+                    {/* <label className="form-label" htmlFor="registerEmail">Email</label> */}
                 </div>
 
                 
-                <div className="form-floating text-dark mb-3">
-                    <input type="password" className="form-control" id="repeatPassword" placeholder="Password" />
-                    <label htmlFor="repeatPassword">Repeat password</label>
+                <div className="form-outline mb-3">
+                    <input type="password" id="registerPassword" className="form-control form-control-lg bg-dark text-light"
+                    placeholder="Password" onChange={passInput} required/>
+                    {/* <label className="form-label" htmlFor="registerPassword">Password</label> */}
                 </div>
 
+
+                <div className="form-outline mb-3">
+                    <input type="password" className="form-control form-control-lg bg-dark text-light" id="repeatPassword"
+                    placeholder="Password" onChange={validatePass} required/>
+                    {/* <label htmlFor="repeatPassword">Repeat password</label> */}
+                </div>
 
                 
                 <div className="form-check d-flex justify-content-center mb-4 text-white">
