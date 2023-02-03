@@ -45,19 +45,19 @@ const Details = () => {
         })
     }
 
-   return <div className="flexCenter">
-    <div className="album py-5 bg-dark mb-5">
-        <div className="row justify-content-center">
-            <div className="col-md-2">
-                <div className="card mb-4 box-shadow bg-dark text-white">
+
+                return <div className="card mb-4 box-shadow bg-dark text-white" style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: "400px", margin: "auto", padding: "20px"}}>
                     <img className="card-img-top" src={item.image} alt={item.title}></img>
                     <div className="card-body">
                         <p className="card-text">{item.title}</p>
                         <div className="d-flex justify-content-between align-items-center">
                             <small className="text-muted">1h 58min</small>
                         </div>
+                        <div className="d-flex justify-content-between align-items-center">
+                        <p className="card-text pt-2">{item.content}</p>
+                        </div>
                         
-                        <div style={{paddingTop: 10}}>
+                        <div className="pt-3">
                         {(!isNotLogged && user.isAdmin === true) && <div className="d-flex justify-content-center">
                     <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
                 </div>}
@@ -66,18 +66,7 @@ const Details = () => {
                     </div>
                 </div>
                 
-            </div>
-            <div className="col-md-8 text-white p-4 p-lg-0">
-  <p>{item.content}</p>
-
-  <div className="ratio ratio-16x9">
-    <iframe className='embed-responsive-item' src="https://www.youtube.com/embed/jQ5lPt9edzQ" title="Alien Trailer"></iframe>
-  </div>
-</div>
-            
-        </div>
-    </div>
-   </div>;
+          
 };
 
 export default Details;
